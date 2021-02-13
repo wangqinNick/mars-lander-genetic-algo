@@ -102,12 +102,14 @@ class FlyState(Enum):
 class Lander:
     GROUND = None
     LANDING_ZONE_MARK = None
+    MAX_LIFECYCLE = None
 
-    def __init__(self, init_state, chromosome, ground):
+    def __init__(self, init_state, chromosome, ground, max_lifecycle):
         self.trajectory = [init_state]
         self.flystate = FlyState.Flying
         self.chromosome = chromosome
         Lander.GROUND = ground
+        Lander.MAX_LIFECYCLE = max_lifecycle
         self.landing_zone = []
         self.fitness = 0.0
         self.hit_mark = -1  # mark the hitting point of the Lander
@@ -123,6 +125,8 @@ class Lander:
         """
         # Run the whole life of the chromosome in one cycle
         for i, cmd in enumerate(self.chromosome):
+            if i > Lander.MAX_LIFECYCLE:
+                break
             current_state = self.trajectory[i]
             cmd = self.chromosome[i]
             next_state = self.compute_next_state(current_state, cmd)

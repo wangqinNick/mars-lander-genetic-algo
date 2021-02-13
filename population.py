@@ -22,7 +22,7 @@ class Population:
     is an instance of a chromosome class
     """
     CHROMOSOME_SIZE = 50
-    MAX_LIFETIME = 20
+    MAX_LIFECYCLE = 20
     X = 5000
     Y = 2500
     ANGLE = 0
@@ -38,7 +38,7 @@ class Population:
                        position=Vector(X, Y),
                        acceleration=Vector(0, 0))
 
-    def __init__(self, mutation_rate, pop_size, ground_points):
+    def __init__(self, mutation_rate, pop_size, ground_points, max_lifecycle):
         self.mutation_rate = mutation_rate
         self.population = []
         self.mating_pool = []
@@ -46,6 +46,7 @@ class Population:
         self.generation_count = 1
         self.batch_simulations = []
         self.all_simulations = []
+        Population.MAX_LIFECYCLE = max_lifecycle
 
         self.ground_points = ground_inputs_to_line(ground_points)
 
@@ -53,8 +54,10 @@ class Population:
         for _ in range(self.population_size):
             new_lander = Lander(chromosome=Chromosome(Population.CHROMOSOME_SIZE),
                                 init_state=Population.INIT_STATE,
-                                ground=self.ground_points)
+                                ground=self.ground_points,
+                                max_lifecycle=Population.MAX_LIFECYCLE)
             self.population.append(new_lander)
+        self.simulate()
 
     def simulate(self):
         """
@@ -131,11 +134,14 @@ class Population:
             # Fill the new population with the new child
             self.population.append(Lander(chromosome=child0,
                                           init_state=Population.INIT_STATE,
-                                          ground=self.ground_points))
+                                          ground=self.ground_points,
+                                          max_lifecycle=Population.MAX_LIFECYCLE))
             self.population.append(Lander(chromosome=child1,
                                           init_state=Population.INIT_STATE,
-                                          ground=self.ground_points))
+                                          ground=self.ground_points,
+                                          max_lifecycle=Population.MAX_LIFECYCLE))
         # Increase the generation count
+        self.simulate()
         self.generation_count += 1
 
     def calculate_pop_fitness(self):
