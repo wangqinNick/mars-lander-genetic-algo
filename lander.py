@@ -117,6 +117,7 @@ class Lander:
         self.distance = None
 
         self.compute_trajectory()
+        self.calculate_distance()
         self.calculate_fitness()
 
     def compute_trajectory(self):
@@ -124,11 +125,12 @@ class Lander:
         compute the whole trajectory for the Lander and connect to the trajectory list
         """
         # Run the whole life of the chromosome in one cycle
-        for i, cmd in enumerate(self.chromosome):
+        commands = self.chromosome.genes
+        for i, cmd in enumerate(commands):
             if i > Lander.MAX_LIFECYCLE:
                 break
             current_state = self.trajectory[i]
-            cmd = self.chromosome[i]
+            cmd = commands[i]
             next_state = self.compute_next_state(current_state, cmd)
             self.trajectory.append(next_state)
             if self.evaluate_outside(next_state):
@@ -137,7 +139,6 @@ class Lander:
                 break
             if self.evaluate_no_fuel(next_state):
                 break
-        self.calculate_distance()
         return
 
     @classmethod
@@ -225,13 +226,12 @@ class Lander:
             self.calculate_distance_landing()
 
     def calculate_distance_landing(self):
-        if self.hit_mark != -1:
-            distance = get_distance_landing(ground_list=Lander.GROUND,
-                                            landing_zone_index=Lander.LANDING_ZONE_MARK,
-                                            landing_index=self.hit_mark,
-                                            x1=self.trajectory[-1].position.x,
-                                            y1=self.trajectory[-1].position.y)
-            self.distance = distance
+        distance = get_distance_landing(ground_list=Lander.GROUND,
+                                        landing_zone_index=Lander.LANDING_ZONE_MARK,
+                                        landing_index=self.hit_mark,
+                                        x1=self.trajectory[-1].position.x,
+                                        y1=self.trajectory[-1].position.y)
+        self.distance = distance
 
     def calculate_distance_flying(self):
         distance = get_distance(Lander.GROUND[Lander.LANDING_ZONE_MARK].x,
@@ -249,3 +249,6 @@ class Lander:
             self.fitness *= 0.1
         if self.status == FlyState.Landed:
             self.fitness **= 4
+
+    def get_chromosome(self):
+        return self.chromosome

@@ -1,6 +1,5 @@
 from plane import Vector
 from population import Population
-from turtle import Screen
 from ground import Ground, SimpleTarget
 
 MUTATION_RATE = 0.05
@@ -20,16 +19,19 @@ def init():
 
 
 def evolve(population):
-    population.calculate_pop_fitness()
     population.selection()
     population.reproduction()
 
 
 def main():
-    first_generation = init()
+    generation_count = 0
+    population = init()
     while True:
-        evolve(first_generation)
-
+        evolve(population)
+        print("Generation: {}".format(generation_count))
+        if generation_count % 10 == 0:
+            population.display_current_population_simulation()
+        generation_count += 1
 
 if __name__ == '__main__':
     main()

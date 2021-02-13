@@ -74,7 +74,6 @@ class Population:
         Plot trajectory of every chromosome of population
         for all generations
         """
-        simulations = self.batch_simulations
         plt.ion()
         plt.title(f"Simulation of generation - {self.generation_count}")
 
@@ -85,7 +84,7 @@ class Population:
             y.append(point.y)
         plt.plot(x, y)
 
-        for simulation in simulations:
+        for simulation in self.batch_simulations:
             x, y = [], []
             for state in simulation:
                 x.append(state.position.x)
@@ -143,10 +142,6 @@ class Population:
         # Increase the generation count
         self.simulate()
         self.generation_count += 1
-
-    def calculate_pop_fitness(self):
-        for i in self.population:
-            i.calculate_fitness()
 
     def get_max_fitness(self):
         record = -1.0
