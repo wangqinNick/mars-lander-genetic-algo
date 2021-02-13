@@ -1,9 +1,8 @@
 import math
-from turtle import Turtle
 from plane import Vector
 from enum import Enum
 
-GRAVITY = Vector(0.0, -2.00)
+GRAVITY = Vector(0.0, -3.71)
 MAX_X = 6999
 MIN_X = 0
 
@@ -114,11 +113,11 @@ class Lander:
         self.fitness = 0.0
         self.hit_mark = -1  # mark the hitting point of the Lander
         self.status = FlyState.Flying
-        self.distance = None
 
         self.compute_trajectory()
-        self.calculate_distance()
+        self.distance = self.calculate_distance()
         self.calculate_fitness()
+        # print(self.hit_mark)
 
     def compute_trajectory(self):
         """
@@ -143,8 +142,8 @@ class Lander:
 
     @classmethod
     def compute_next_state(cls, current_state, cmd):
-        next_state_angle = current_state.angle + cmd.angle
-        next_state_power = coerce_range(current_state.power + cmd.power, 0, 4)
+        next_state_angle = cmd.angle
+        next_state_power = cmd.power
         thrust = Vector(0.0, 1.0).scale(next_state_power).rotate(next_state_angle)
         next_state_acceleration = current_state.acceleration.add(thrust).add(GRAVITY)
         next_state_speed = current_state.speed.add(current_state.acceleration).round_up()
@@ -160,7 +159,6 @@ class Lander:
 
     def evaluate_hit_ground(self, current_state, next_state):
         Lander.find_landing_zone()
-
         # Calculate the landing status (next state)
         # 0, for landing in landing zone
         # 1, for crashing on the ground
@@ -169,23 +167,13 @@ class Lander:
                                                                       next_state.position,
                                                                       Lander.GROUND,
                                                                       Lander.LANDING_ZONE_MARK)
-        # print(self.land_index)
         if landing_status == 0 or landing_status == 1:  # landing or crashing
-            if (next_state.angle == 0  # landing angle
-                    and abs(next_state.speed.x) <= 40  # landing vertical speed
-                    and abs(next_state.speed.y) <= 20  # landing horizontal speed
-                    and landing_status == 0):  # landing in landing zone
+            if landing_status == 0:  # landing in landing zone
                 self.status = FlyState.Landed
             else:
                 self.status = FlyState.Crashed
             return True
         return False
-
-    def evaluate_hit_target(self, next_state, target):
-        if (target.x - 10 < next_state.position.x <= target.x + 10 and
-                target.y - 10 < next_state.position.y <= target.y + 10):
-            self.status = FlyState.Landed
-            return True
 
     def evaluate_no_fuel(self, next_state):
         """
@@ -221,34 +209,32 @@ class Lander:
 
     def calculate_distance(self):
         if self.status == FlyState.Flying:
-            self.calculate_distance_flying()
+            return self.calculate_distance_flying()
         else:
-            self.calculate_distance_landing()
+            return self.calculate_distance_landing()
 
     def calculate_distance_landing(self):
-        distance = get_distance_landing(ground_list=Lander.GROUND,
-                                        landing_zone_index=Lander.LANDING_ZONE_MARK,
-                                        landing_index=self.hit_mark,
-                                        x1=self.trajectory[-1].position.x,
-                                        y1=self.trajectory[-1].position.y)
-        self.distance = distance
+        return get_distance_landing(ground_list=Lander.GROUND,
+                                    landing_zone_index=Lander.LANDING_ZONE_MARK,
+                                    landing_index=self.hit_mark,
+                                    x1=self.trajectory[-1].position.x,
+                                    y1=self.trajectory[-1].position.y)
 
     def calculate_distance_flying(self):
-        distance = get_distance(Lander.GROUND[Lander.LANDING_ZONE_MARK].x,
-                                Lander.GROUND[Lander.LANDING_ZONE_MARK].y,
-                                self.trajectory[-1].position.x,
-                                self.trajectory[-1].position.y)
-        self.distance = distance
+        return get_distance(Lander.GROUND[Lander.LANDING_ZONE_MARK].x,
+                            Lander.GROUND[Lander.LANDING_ZONE_MARK].y,
+                            self.trajectory[-1].position.x,
+                            self.trajectory[-1].position.y)
 
     def calculate_fitness(self):
         distance = self.distance
         if distance < 1:
             distance = 1
-        self.fitness = (1 / distance) ** 5
+        self.fitness = (1 / distance) ** 10
         if self.status == FlyState.Crashed:
             self.fitness *= 0.1
         if self.status == FlyState.Landed:
-            self.fitness **= 4
+            self.fitness *= 10
 
     def get_chromosome(self):
         return self.chromosome

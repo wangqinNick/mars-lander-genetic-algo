@@ -3,16 +3,15 @@ from population import Population
 from ground import Ground, SimpleTarget
 
 MUTATION_RATE = 0.05
-MAX_LIFECYCLE = 30
+MAX_LIFECYCLE = 100
 
 
 def init():
     ground_points = ["0 1500", "1000 2000", "2000 500", "3500 500",
                      "5000 1500", "6999 1000"]
-    simple_target = SimpleTarget(5000, 2500)
 
     population = Population(mutation_rate=MUTATION_RATE,
-                            pop_size=100,
+                            pop_size=200,
                             ground_points=ground_points,
                             max_lifecycle=MAX_LIFECYCLE)
     return population

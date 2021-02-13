@@ -21,8 +21,8 @@ class Population:
     A class to describe a population, where each member
     is an instance of a chromosome class
     """
-    CHROMOSOME_SIZE = 50
-    MAX_LIFECYCLE = 20
+    CHROMOSOME_SIZE = 100
+    MAX_LIFECYCLE = None
     X = 5000
     Y = 2500
     ANGLE = 0
