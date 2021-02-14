@@ -1,10 +1,11 @@
-import numpy as np
-from lander import Lander, State
-from chromosome import Chromosome
-from plane import Vector
-from matplotlib import pyplot as plt
 from collections import namedtuple
 from copy import deepcopy
+
+import numpy as np
+from matplotlib import pyplot as plt
+
+from chromosome import Chromosome
+from lander import Lander
 
 CMD_TUPLE = namedtuple("Command", ["angle", "power"])
 
