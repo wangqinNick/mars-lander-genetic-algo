@@ -1,5 +1,5 @@
 import math
-from plane import Vector, Point
+from plane import Vector
 from enum import Enum
 
 GRAVITY = Vector(0.0, -3.71)

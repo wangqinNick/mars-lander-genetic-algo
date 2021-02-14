@@ -9,13 +9,6 @@ from copy import deepcopy
 CMD_TUPLE = namedtuple("Command", ["angle", "power"])
 
 
-def ground_inputs_to_line(ground_points):
-    points = []
-    for point in ground_points:
-        points.append(Vector(*map(int, point.split())))
-    return points
-
-
 class Population:
     """
     A class to describe a population, where each member
@@ -23,22 +16,17 @@ class Population:
     """
     CHROMOSOME_SIZE = None
     MAX_LIFECYCLE = None
-    X = 6500
-    Y = 1300
-    ANGLE = 0
-    DX = 0
-    DY = 50
+    INIT_X = None
+    INIT_Y = None
+    INIT_ANGLE = None
+    INIT_DX = None
+    INIT_DY = None
     FUEL = 2000
     total_distance = None
 
-    INIT_STATE = State(fuel=FUEL,
-                       power=0,
-                       angle=ANGLE,
-                       speed=Vector(DX, DY),
-                       position=Vector(X, Y),
-                       acceleration=Vector(0, 0))
+    INIT_STATE = None
 
-    def __init__(self, mutation_rate, pop_size, ground_points, max_lifecycle):
+    def __init__(self, mutation_rate, pop_size, init_state, ground_points, max_lifecycle):
         self.mutation_rate = mutation_rate
         self.population = []
         self.mating_pool = []
@@ -48,8 +36,8 @@ class Population:
         self.all_simulations = []
         Population.MAX_LIFECYCLE = max_lifecycle
         Population.CHROMOSOME_SIZE = max_lifecycle
-
-        self.ground_points = ground_inputs_to_line(ground_points)
+        Population.INIT_STATE = init_state
+        self.ground_points = ground_points
 
         # create and run the landers
         for _ in range(self.population_size):
