@@ -23,18 +23,18 @@ class Population:
     """
     CHROMOSOME_SIZE = None
     MAX_LIFECYCLE = None
-    X = 5000
-    Y = 2500
+    X = 6500
+    Y = 1300
     ANGLE = 0
     DX = 0
-    DY = 0
+    DY = 50
     FUEL = 2000
     total_distance = None
 
     INIT_STATE = State(fuel=FUEL,
                        power=0,
                        angle=ANGLE,
-                       speed=Vector(0, 0),
+                       speed=Vector(DX, DY),
                        position=Vector(X, Y),
                        acceleration=Vector(0, 0))
 
