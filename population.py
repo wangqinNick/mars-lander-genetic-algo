@@ -16,12 +16,6 @@ class Population:
     """
     CHROMOSOME_SIZE = None
     MAX_LIFECYCLE = None
-    INIT_X = None
-    INIT_Y = None
-    INIT_ANGLE = None
-    INIT_DX = None
-    INIT_DY = None
-    FUEL = 2000
     total_distance = None
 
     INIT_STATE = None
