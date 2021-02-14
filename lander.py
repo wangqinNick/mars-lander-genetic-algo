@@ -1,5 +1,5 @@
 import math
-from plane import Vector
+from plane import Vector, Point
 from enum import Enum
 
 GRAVITY = Vector(0.0, -3.71)
@@ -208,10 +208,17 @@ class Lander:
                 return
 
     def calculate_distance(self):
-        if self.status == FlyState.Flying:
+        """if self.status == FlyState.Flying:
             return self.calculate_distance_flying()
         else:
-            return self.calculate_distance_landing()
+            return self.calculate_distance_landing()"""
+        # calculate simple distance
+        mid_point = Point((Lander.GROUND[Lander.LANDING_ZONE_MARK].x + Lander.GROUND[Lander.LANDING_ZONE_MARK+1].x)/2,
+                          (Lander.GROUND[Lander.LANDING_ZONE_MARK].y + Lander.GROUND[Lander.LANDING_ZONE_MARK+1].y /2))
+        return get_distance(mid_point.x,
+                            mid_point.y,
+                            self.trajectory[-1].position.x,
+                            self.trajectory[-1].position.y)
 
     def calculate_distance_landing(self):
         return get_distance_landing(ground_list=Lander.GROUND,
