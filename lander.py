@@ -114,6 +114,7 @@ class Lander:
 
         self.compute_trajectory()
         self.distance = self.calculate_distance()
+        print(self.distance)
         self.calculate_fitness()
         # print(self.hit_mark)
 
@@ -216,10 +217,7 @@ class Lander:
         mid_point = Point(
             (Lander.GROUND[Lander.LANDING_ZONE_MARK].x + Lander.GROUND[Lander.LANDING_ZONE_MARK + 1].x) / 2,
             (Lander.GROUND[Lander.LANDING_ZONE_MARK].y + Lander.GROUND[Lander.LANDING_ZONE_MARK + 1].y / 2))
-        return get_distance(mid_point.x,
-                            mid_point.y,
-                            self.trajectory[-1].position.x,
-                            self.trajectory[-1].position.y)
+        return abs(self.trajectory[-1].position.x - mid_point.x)
 
     def calculate_distance_landing(self):
         return get_distance_landing(ground_list=Lander.GROUND,
@@ -238,7 +236,7 @@ class Lander:
         distance = self.distance
         if distance < 1:
             distance = 1
-        self.fitness = (1 / distance) ** 10
+        self.fitness = (1 / distance) ** 2
         if self.status == FlyState.Crashed:
             self.fitness *= 0.1
         if self.status == FlyState.Landed:

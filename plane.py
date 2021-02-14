@@ -76,10 +76,13 @@ class Vector:
         for i in range(1, len(lines)):
             if cls.do_intersect(a, b, lines[i - 1], lines[i]):
                 if i - 1 == landing_zone_index:
-                    return 0, i - 1
+                    # reach landing zone
+                    return 0, landing_zone_index
                 else:
+                    # hit ground
                     return 1, i - 1
         else:
+            # still flying
             return 2, -1
 
     @classmethod

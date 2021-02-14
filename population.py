@@ -99,10 +99,8 @@ class Population:
 
     def selection(self):
         self.mating_pool.clear()
-
-        max_fitness = self.get_max_fitness()
-        min_fitness = self.get_min_fitness()
-
+        max_fitness, min_fitness, ave_fitness, ave_distance = self.evaluate_pop_fitness()
+        # print(ave_fitness, ave_distance)
         for i in range(self.population_size):
             if max_fitness == min_fitness:
                 fitness_normalized = 1
@@ -144,16 +142,17 @@ class Population:
         self.simulate()
         self.generation_count += 1
 
-    def get_max_fitness(self):
-        record = -1.0
+    def evaluate_pop_fitness(self):
+        max_record = self.population[0].fitness
+        min_record = self.population[0].fitness
+        sum_fitness = 0
+        sum_distance = 0
         for i in self.population:
-            if i.fitness > record:
-                record = i.fitness
-        return record
-
-    def get_min_fitness(self):
-        record = 10000000.0
-        for i in self.population:
-            if i.fitness < record:
-                record = i.fitness
-        return record
+            if i.fitness > max_record:
+                max_record = i.fitness
+            if i.fitness < min_record:
+                min_record = i.fitness
+            sum_fitness += i.fitness
+        ave_fitness = sum_fitness / self.population_size
+        ave_distance = sum_distance / self.population_size
+        return max_record, min_record, ave_fitness, ave_distance

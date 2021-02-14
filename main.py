@@ -1,19 +1,23 @@
-from plane import Vector
 from population import Population
-from ground import Ground, SimpleTarget
 
 MUTATION_RATE = 0.05
 MAX_LIFECYCLE = 100
+REFRESH_RATE = 1
 
 
 def init():
-    ground_points = ["0 1500", "1000 2000", "2000 500", "3500 500",
-                     "5000 1500", "6999 1000"]
+    ground_points_1 = ["0 1500", "1000 2000", "2000 500", "3500 500",
+                       "5000 1500", "6999 1000"]
+    ground_points_2 = ["0 1500", "1000 2000", "2000 500", "3500 500",
+                       "4000 2000", "5000 2200", "6999 1000"]
+
+    ground_points_list = list([ground_points_1, ground_points_2])
 
     population = Population(mutation_rate=MUTATION_RATE,
                             pop_size=200,
-                            ground_points=ground_points,
+                            ground_points=ground_points_list[0],
                             max_lifecycle=MAX_LIFECYCLE)
+    population.display_current_population_simulation()
     return population
 
 
@@ -28,7 +32,7 @@ def main():
     while True:
         evolve(population)
         print("Generation: {}".format(generation_count))
-        if generation_count % 10 == 0:
+        if generation_count % REFRESH_RATE == 0:
             population.display_current_population_simulation()
         generation_count += 1
 
