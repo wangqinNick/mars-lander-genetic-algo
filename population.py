@@ -21,7 +21,7 @@ class Population:
     A class to describe a population, where each member
     is an instance of a chromosome class
     """
-    CHROMOSOME_SIZE = 100
+    CHROMOSOME_SIZE = None
     MAX_LIFECYCLE = None
     X = 5000
     Y = 2500
@@ -47,6 +47,7 @@ class Population:
         self.batch_simulations = []
         self.all_simulations = []
         Population.MAX_LIFECYCLE = max_lifecycle
+        Population.CHROMOSOME_SIZE = max_lifecycle
 
         self.ground_points = ground_inputs_to_line(ground_points)
 

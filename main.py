@@ -32,5 +32,6 @@ def main():
             population.display_current_population_simulation()
         generation_count += 1
 
+
 if __name__ == '__main__':
     main()

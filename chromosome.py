@@ -66,7 +66,8 @@ class Chromosome:
         for i in range(len(self.genes)):
             if random.random() < mutation_rate:
                 new_angle = coerce_range(
-                    self.genes[i - 1].angle + random.randint(-15, 16), -90, 90)
+                    self.genes[i - 1].angle + random.randint(-15, 16),
+                    -90, 90)
                 new_power = coerce_range(
                     self.genes[i - 1].power + random.randint(-1, 2),
                     0, 4)

@@ -8,7 +8,6 @@ MIN_X = 0
 
 
 def get_distance(x0, y0, x1, y1):
-    # Todo: calculate and return the surface distance from the collision point and safe zone
     distance = math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2)
     return distance
 
@@ -105,7 +104,6 @@ class Lander:
 
     def __init__(self, init_state, chromosome, ground, max_lifecycle):
         self.trajectory = [init_state]
-        self.flystate = FlyState.Flying
         self.chromosome = chromosome
         Lander.GROUND = ground
         Lander.MAX_LIFECYCLE = max_lifecycle
@@ -132,6 +130,7 @@ class Lander:
             cmd = commands[i]
             next_state = self.compute_next_state(current_state, cmd)
             self.trajectory.append(next_state)
+
             if self.evaluate_outside(next_state):
                 break
             if self.evaluate_hit_ground(current_state, next_state):
@@ -167,11 +166,12 @@ class Lander:
                                                                       next_state.position,
                                                                       Lander.GROUND,
                                                                       Lander.LANDING_ZONE_MARK)
-        if landing_status == 0 or landing_status == 1:  # landing or crashing
-            if landing_status == 0:  # landing in landing zone
-                self.status = FlyState.Landed
-            else:
-                self.status = FlyState.Crashed
+
+        if landing_status == 0:  # landing in landing zone
+            self.status = FlyState.Landed
+            return True
+        elif landing_status == 1:
+            self.status = FlyState.Crashed
             return True
         return False
 
@@ -193,7 +193,7 @@ class Lander:
         :return: True, if next state will be outside the frame; False, otherwise
         """
         if next_state.position.x > MAX_X or next_state.position.x < MIN_X:
-            self.flystate = FlyState.Crashed
+            self.status = FlyState.Crashed
             return True
         return False
 
@@ -213,8 +213,9 @@ class Lander:
         else:
             return self.calculate_distance_landing()"""
         # calculate simple distance
-        mid_point = Point((Lander.GROUND[Lander.LANDING_ZONE_MARK].x + Lander.GROUND[Lander.LANDING_ZONE_MARK+1].x)/2,
-                          (Lander.GROUND[Lander.LANDING_ZONE_MARK].y + Lander.GROUND[Lander.LANDING_ZONE_MARK+1].y /2))
+        mid_point = Point(
+            (Lander.GROUND[Lander.LANDING_ZONE_MARK].x + Lander.GROUND[Lander.LANDING_ZONE_MARK + 1].x) / 2,
+            (Lander.GROUND[Lander.LANDING_ZONE_MARK].y + Lander.GROUND[Lander.LANDING_ZONE_MARK + 1].y / 2))
         return get_distance(mid_point.x,
                             mid_point.y,
                             self.trajectory[-1].position.x,

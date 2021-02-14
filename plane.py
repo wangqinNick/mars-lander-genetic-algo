@@ -73,10 +73,9 @@ class Vector:
                  1, if intersected with normal ground lines
                  2, if not intersected with ground lines
         """
-        for i in range(len(lines)):
+        for i in range(1, len(lines)):
             if cls.do_intersect(a, b, lines[i - 1], lines[i]):
                 if i - 1 == landing_zone_index:
-                    print("True")
                     return 0, i - 1
                 else:
                     return 1, i - 1
