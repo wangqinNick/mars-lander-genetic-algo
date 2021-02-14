@@ -3,6 +3,7 @@ from population import Population
 MUTATION_RATE = 0.05
 MAX_LIFECYCLE = 100
 REFRESH_RATE = 1
+MAP_SELECTION = 1
 
 
 def init():
@@ -20,8 +21,9 @@ def init():
 
     population = Population(mutation_rate=MUTATION_RATE,
                             pop_size=200,
-                            ground_points=ground_points_list[2],
+                            ground_points=ground_points_list[MAP_SELECTION],
                             max_lifecycle=MAX_LIFECYCLE)
+
     population.display_current_population_simulation()
     return population
 

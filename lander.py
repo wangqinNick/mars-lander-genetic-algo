@@ -18,7 +18,7 @@ def get_distance_landing(ground_list,
                          x1,
                          y1
                          ):
-    if landing_index > landing_zone_index:
+    if landing_index > landing_zone_index+1:
         surface_distance = 0.0
         for i in range(landing_zone_index, landing_index):
             x0_ = ground_list[i].x
@@ -33,10 +33,13 @@ def get_distance_landing(ground_list,
             surface_distance += segment_distance
         x0 = ground_list[landing_index].x
         y0 = ground_list[landing_index].y
-        segment_distance = get_distance(x0, y0, x1, y1)
+        segment_distance = get_distance(x0=x0,
+                                        y0=y0,
+                                        x1=x1,
+                                        y1=y1)
         surface_distance += segment_distance
         return surface_distance
-    else:
+    elif landing_index < landing_zone_index:
         # left-hand side
         surface_distance = 0.0
         for i in range(landing_index + 1,  # 3
@@ -54,9 +57,14 @@ def get_distance_landing(ground_list,
             surface_distance += segment_distance
         x0 = ground_list[landing_index + 1].x
         y0 = ground_list[landing_index + 1].y
-        segment_distance = get_distance(x0, y0, x1, y1)
+        segment_distance = get_distance(x0=x0,
+                                        y0=y0,
+                                        x1=x1,
+                                        y1=y1)
         surface_distance += segment_distance
         return surface_distance
+    else:
+        return 0
 
 
 def coerce_range(value, min_value, max_value):
@@ -114,9 +122,7 @@ class Lander:
 
         self.compute_trajectory()
         self.distance = self.calculate_distance()
-        print(self.distance)
         self.calculate_fitness()
-        # print(self.hit_mark)
 
     def compute_trajectory(self):
         """
@@ -218,6 +224,7 @@ class Lander:
             (Lander.GROUND[Lander.LANDING_ZONE_MARK].x + Lander.GROUND[Lander.LANDING_ZONE_MARK + 1].x) / 2,
             (Lander.GROUND[Lander.LANDING_ZONE_MARK].y + Lander.GROUND[Lander.LANDING_ZONE_MARK + 1].y / 2))
         return abs(self.trajectory[-1].position.x - mid_point.x)
+        # return self.calculate_distance_landing()
 
     def calculate_distance_landing(self):
         return get_distance_landing(ground_list=Lander.GROUND,

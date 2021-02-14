@@ -5,6 +5,7 @@ from plane import Vector
 from matplotlib import pyplot as plt
 from collections import namedtuple
 from copy import deepcopy
+from sklearn.preprocessing import normalize
 
 CMD_TUPLE = namedtuple("Command", ["angle", "power"])
 
@@ -102,16 +103,24 @@ class Population:
         max_fitness, min_fitness, ave_fitness, ave_distance = self.evaluate_pop_fitness()
         # print(ave_fitness, ave_distance)
         for i in range(self.population_size):
-            if max_fitness == min_fitness:
-                fitness_normalized = 1
-            else:
-                fitness_normalized = (self.population[i].fitness - min_fitness) / (max_fitness - min_fitness)
+            fitness_normalized = self.population[i].fitness / max_fitness
             times = int(fitness_normalized * 100)
             for j in range(times):
                 self.mating_pool.append(self.population[i])
+        print(len(self.mating_pool))
 
     def reproduction(self):
+        # sort the population
+        self.population.sort(key=lambda member: member.fitness, reverse=True)
+
+        # elitism selection
+        elitism_pool = []
+        for i in range(int(0.2 * self.population_size)):
+            elitism_pool.append(deepcopy(self.population[i]))
+
         self.population.clear()
+        self.population.extend(deepcopy(elitism_pool))
+
         while len(self.population) < self.population_size:
             # Spin the wheel of fortune to pick two parents
 
@@ -143,16 +152,17 @@ class Population:
         self.generation_count += 1
 
     def evaluate_pop_fitness(self):
-        max_record = self.population[0].fitness
-        min_record = self.population[0].fitness
+        max_fitness = self.population[0].fitness
+        min_fitness = self.population[0].fitness
         sum_fitness = 0
         sum_distance = 0
         for i in self.population:
-            if i.fitness > max_record:
-                max_record = i.fitness
-            if i.fitness < min_record:
-                min_record = i.fitness
+            if i.fitness > max_fitness:
+                max_fitness = i.fitness
+            if i.fitness < min_fitness:
+                min_fitness = i.fitness
             sum_fitness += i.fitness
+            sum_distance += i.distance
         ave_fitness = sum_fitness / self.population_size
         ave_distance = sum_distance / self.population_size
-        return max_record, min_record, ave_fitness, ave_distance
+        return max_fitness, min_fitness, ave_fitness, ave_distance
