@@ -5,7 +5,6 @@ from plane import Vector
 from matplotlib import pyplot as plt
 from collections import namedtuple
 from copy import deepcopy
-from sklearn.preprocessing import normalize
 
 CMD_TUPLE = namedtuple("Command", ["angle", "power"])
 
