@@ -34,7 +34,7 @@ class Chromosome:
                 -90, 90)
             power = coerce_range(
                 self.genes[i - 1].power + random.randint(-1, 2),
-                0, 4)
+                0, Chromosome.MAX_THRUST_VALUE)
             self.genes.append(CMD_TUPLE(angle, power))
 
     def cross_over(self, partner):
@@ -70,5 +70,5 @@ class Chromosome:
                     -90, 90)
                 new_power = coerce_range(
                     self.genes[i - 1].power + random.randint(-1, 2),
-                    0, 4)
+                    0, Chromosome.MAX_THRUST_VALUE)
                 self.genes[i] = (CMD_TUPLE(new_angle, new_power))

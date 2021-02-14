@@ -89,7 +89,6 @@ class Population:
             times = int(fitness_normalized * 100)
             for j in range(times):
                 self.mating_pool.append(self.population[i])
-        print(len(self.mating_pool))
 
     def reproduction(self):
         # sort the population

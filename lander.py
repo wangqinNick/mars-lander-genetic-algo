@@ -20,7 +20,7 @@ def get_distance_landing(ground_list,
                          ):
     if landing_index > landing_zone_index+1:
         surface_distance = 0.0
-        for i in range(landing_zone_index, landing_index):
+        for i in range(landing_zone_index+1, landing_index):
             x0_ = ground_list[i].x
             y0_ = ground_list[i].y
             x1_ = ground_list[i + 1].x
