@@ -4,6 +4,7 @@ from lander import State
 
 MUTATION_RATE = 0.08
 MAX_LIFECYCLE = 100
+POPULATION_SIZE = 100
 REFRESH_RATE = 1
 MAP_SELECTION = 1
 
@@ -57,7 +58,7 @@ def init():
                        acceleration=Vector(0, 0))
 
     population = Population(mutation_rate=MUTATION_RATE,
-                            pop_size=200,
+                            pop_size=POPULATION_SIZE,
                             ground_points=ground_points,
                             init_state=init_state,
                             max_lifecycle=MAX_LIFECYCLE)

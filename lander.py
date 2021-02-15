@@ -18,6 +18,7 @@ def get_distance_landing(ground_list,
                          x1,
                          y1
                          ):
+    print(landing_zone_index, landing_index)
     if landing_index > landing_zone_index+1:
         surface_distance = 0.0
         for i in range(landing_zone_index+1, landing_index):
@@ -80,9 +81,9 @@ class State:
         self.fuel = fuel
         self.power = power
         self.angle = angle
-        self.position = position
-        self.speed = speed
-        self.acceleration = acceleration
+        self.position = position  # point
+        self.speed = speed  # vector
+        self.acceleration = acceleration  # vector
 
 
 class ControlCommands:
