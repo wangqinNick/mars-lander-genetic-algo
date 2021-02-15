@@ -2,7 +2,7 @@ from population import Population
 from plane import Vector
 from lander import State
 
-MUTATION_RATE = 0.05
+MUTATION_RATE = 0.08
 MAX_LIFECYCLE = 100
 REFRESH_RATE = 1
 MAP_SELECTION = 1

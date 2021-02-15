@@ -1,5 +1,5 @@
 from collections import namedtuple
-from copy import deepcopy
+from copy import deepcopy, copy
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -82,26 +82,29 @@ class Population:
 
     def selection(self):
         self.mating_pool.clear()
-        max_fitness, min_fitness, ave_fitness, ave_distance = self.evaluate_pop_fitness()
-        # print(ave_fitness, ave_distance)
+        # max_fitness, min_fitness, ave_fitness, ave_distance = self.evaluate_pop_fitness()
+        max_fitness = self.population[0].fitness
+        min_fitness = self.population[-1].fitness
+        print(max_fitness, min_fitness)
+
+        # sort the population
+        self.population.sort(key=lambda x: x.fitness, reverse=True)
+
         for i in range(self.population_size):
-            fitness_normalized = self.population[i].fitness / max_fitness
+            fitness_normalized = (self.population[i].fitness - min_fitness) / (max_fitness - min_fitness)
+
             times = int(fitness_normalized * 100)
             for j in range(times):
                 self.mating_pool.append(self.population[i])
 
     def reproduction(self):
-        # sort the population
-        self.population.sort(key=lambda member: member.fitness, reverse=True)
 
         # elitism selection
         elitism_pool = []
         for i in range(int(0.2 * self.population_size)):
-            elitism_pool.append(deepcopy(self.population[i]))
-
+            elitism_pool.append(copy(self.population[i]))
         self.population.clear()
-        self.population.extend(deepcopy(elitism_pool))
-
+        self.population.extend(copy(elitism_pool))
         while len(self.population) < self.population_size:
             # Spin the wheel of fortune to pick two parents
 
