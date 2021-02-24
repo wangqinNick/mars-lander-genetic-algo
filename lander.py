@@ -18,7 +18,6 @@ def get_distance_landing(ground_list,
                          x1,
                          y1
                          ):
-    print(landing_zone_index, landing_index)
     if landing_index > landing_zone_index+1:
         surface_distance = 0.0
         for i in range(landing_zone_index+1, landing_index):
@@ -231,8 +230,8 @@ class Lander:
         return get_distance_landing(ground_list=Lander.GROUND,
                                     landing_zone_index=Lander.LANDING_ZONE_MARK,
                                     landing_index=self.hit_mark,
-                                    x1=self.trajectory[-1].position.x,
-                                    y1=self.trajectory[-1].position.y)
+                                    x1=self.trajectory[-2].position.x,
+                                    y1=self.trajectory[-2].position.y)
 
     def calculate_distance_flying(self):
         return get_distance(Lander.GROUND[Lander.LANDING_ZONE_MARK].x,
