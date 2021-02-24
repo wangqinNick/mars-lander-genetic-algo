@@ -4,7 +4,7 @@ from lander import State
 
 MUTATION_RATE = 0.08
 MAX_LIFECYCLE = 100
-POPULATION_SIZE = 100
+POPULATION_SIZE = 200
 REFRESH_RATE = 30
 MAP_SELECTION = 1
 
@@ -24,7 +24,7 @@ def init():
               "0"]  # INIT_ANGLE
     input2 = [15,  # number of ground points
               "0 2500", "100 200", "500 150", "1000 2000", "2000 2000", "2010 1500", "2200 800", "2500 200",
-              "6899 300", "6999 2500", "4100 2600", "4200 1000", "3500 800", "3100 1100", "3400 2900",
+              "6899 300", "6999 2500", "4100 2600", "4200 1500", "3500 1300", "3100 1600", "3400 3400",
               "6500 1300",  # INIT_X INIT_Y #16
               "-50 0",  # INIT_DX INIT_DY #17
               "0"]  # INIT_ANGLE #18
